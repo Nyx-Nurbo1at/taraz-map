@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Тараз — Историческое Наследие</title>
+  <title>Тараз — Туристический Путеводитель</title>
   
   <!-- Подключаем Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -57,10 +57,10 @@
     #map {
       flex: 1;
       height: 100%;
-      background: #bae6fd;
+      background: #e0f2fe;
     }
 
-    /* Боковая панель (Выезжает при клике) */
+    /* Боковая панель */
     #sidebar {
       width: 380px;
       background: #ffffff;
@@ -99,7 +99,7 @@
       position: absolute;
       top: 10px;
       right: 10px;
-      background: rgba(255,255,255,0.8);
+      background: rgba(255,255,255,0.85);
       border: none;
       border-radius: 50%;
       width: 32px;
@@ -125,7 +125,7 @@
       border-left: 4px solid #0284c7;
     }
 
-    /* Кнопки категорий 2GIS style */
+    /* Кнопки категорий */
     .categories-title {
       font-size: 0.85rem;
       font-weight: 700;
@@ -136,13 +136,13 @@
     }
 
     .category-buttons {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
       gap: 8px;
       margin-bottom: 20px;
     }
 
     .cat-btn {
-      flex: 1;
       padding: 10px 5px;
       border: 1px solid #bae6fd;
       background: #f0f9ff;
@@ -153,9 +153,9 @@
       font-size: 0.85rem;
       transition: all 0.2s ease;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 4px;
+      justify-content: center;
+      gap: 6px;
     }
 
     .cat-btn:hover, .cat-btn.active {
@@ -165,7 +165,7 @@
       box-shadow: 0 4px 10px rgba(2, 132, 199, 0.3);
     }
 
-    /* Карточки заведений (Кафе/Отели) */
+    /* Карточки заведений */
     .poi-list {
       display: flex;
       flex-direction: column;
@@ -179,6 +179,7 @@
       padding: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.04);
       transition: all 0.2s ease;
+      cursor: pointer;
     }
 
     .poi-card:hover {
@@ -274,7 +275,8 @@
         <div class="category-buttons">
           <button class="cat-btn active" onclick="filterPoi('food')"><span>🍽️</span> Поесть</button>
           <button class="cat-btn" onclick="filterPoi('hotel')"><span>🏨</span> Отели</button>
-          <button class="cat-btn" onclick="filterPoi('shop')"><span>🛒</span> Магазины</button>
+          <button class="cat-btn" onclick="filterPoi('park')"><span>🌳</span> Парки</button>
+          <button class="cat-btn" onclick="filterPoi('pharmacy')"><span>🏥</span> Аптеки</button>
         </div>
 
         <div class="poi-list" id="poi-list">
@@ -305,10 +307,13 @@
             { name: "Этно-аул 'Тараз'", rating: "⭐ 4.9", addr: "Трасса Тараз-Шымкент, 15 км", work: "10:00 - 00:00", phone: "+7 (701) 555-44-33", car: "4 мин", bike: "12 мин", walk: "25 мин", lat: 42.8310, lng: 71.2010 }
           ],
           hotel: [
-            { name: "Гостевой дом 'Биби'", rating: "⭐ 4.6", addr: "с. Айша-Биби, ул. Ауэзова 5", work: "Круглосуточно", phone: "+7 (705) 333-22-11", car: "3 мин", bike: "7 мин", walk: "15 мин", lat: 42.8360, lng: 71.2040 }
+            { name: "Гостевой дом 'Биби-Ана'", rating: "⭐ 4.7", addr: "с. Айша-Биби, ул. Ауэзова 5", work: "Круглосуточно", phone: "+7 (705) 333-22-11", car: "3 мин", bike: "7 мин", walk: "15 мин", lat: 42.8360, lng: 71.2040 }
           ],
-          shop: [
-            { name: "Сувениры Тараза", rating: "⭐ 4.7", addr: "Парк Айша-Биби", work: "09:00 - 19:00", phone: "+7 (778) 999-00-11", car: "1 мин", bike: "2 мин", walk: "4 мин", lat: 42.8330, lng: 71.2060 }
+          park: [
+            { name: "Сквер Айша-Биби", rating: "⭐ 4.9", addr: "Территория комплекса", work: "08:00 - 22:00", phone: "Открытый доступ", car: "1 мин", bike: "1 мин", walk: "2 мин", lat: 42.8330, lng: 71.2055 }
+          ],
+          pharmacy: [
+            { name: "Аптека 'Europharma'", rating: "⭐ 4.6", addr: "с. Айша-Биби, ул. Центральная 18", work: "08:00 - 21:00", phone: "+7 (7262) 99-11-22", car: "2 мин", bike: "4 мин", walk: "8 мин", lat: 42.8345, lng: 71.2065 }
           ]
         }
       },
@@ -326,8 +331,11 @@
           hotel: [
             { name: "Отель 'Оазис'", rating: "⭐ 4.5", addr: "ул. Мира 10", work: "Круглосуточно", phone: "+7 (707) 123-45-67", car: "5 мин", bike: "15 мин", walk: "30 мин", lat: 42.8370, lng: 71.2020 }
           ],
-          shop: [
-            { name: "Продукты 'Асыл'", rating: "⭐ 4.4", addr: "ул. Центральная 50", work: "08:00 - 22:00", phone: "+7 (771) 000-11-22", car: "1 мин", bike: "3 мин", walk: "6 мин", lat: 42.8340, lng: 71.2070 }
+          park: [
+            { name: "Историческая аллея", rating: "⭐ 4.8", addr: "Окрестности мавзолея", work: "Круглосуточно", phone: "Открытый доступ", car: "1 мин", bike: "2 мин", walk: "3 мин", lat: 42.8342, lng: 71.2062 }
+          ],
+          pharmacy: [
+            { name: "Аптека 'Садыхан'", rating: "⭐ 4.5", addr: "ул. Центральная 30", work: "08:00 - 22:00", phone: "+7 (771) 000-11-22", car: "2 мин", bike: "5 мин", walk: "10 мин", lat: 42.8350, lng: 71.2075 }
           ]
         }
       },
@@ -346,8 +354,11 @@
           hotel: [
             { name: "Отель 'Тараз Плаза'", rating: "⭐ 4.8", addr: "ул. Сулейманова 15", work: "Круглосуточно", phone: "+7 (7262) 55-00-55", car: "3 мин", bike: "8 мин", walk: "16 мин", lat: 42.8990, lng: 71.3850 }
           ],
-          shop: [
-            { name: "ТЦ 'Mart'", rating: "⭐ 4.9", addr: "ул. Толе би 27", work: "10:00 - 22:00", phone: "+7 (7262) 99-88-77", car: "2 мин", bike: "5 мин", walk: "10 мин", lat: 42.9030, lng: 71.3840 }
+          park: [
+            { name: "Парк им. Б. Момышулы", rating: "⭐ 4.9", addr: "Центральный парк", work: "Круглосуточно", phone: "Открытый доступ", car: "1 мин", bike: "2 мин", walk: "3 мин", lat: 42.9015, lng: 71.3825 }
+          ],
+          pharmacy: [
+            { name: "Аптека 24/7 'Зере'", rating: "⭐ 4.7", addr: "ул. Толе би 20", work: "Круглосуточно", phone: "+7 (7262) 44-55-66", car: "1 мин", bike: "2 мин", walk: "4 мин", lat: 42.9008, lng: 71.3810 }
           ]
         }
       },
@@ -365,8 +376,11 @@
           hotel: [
             { name: "Гостиница 'Жамбыл'", rating: "⭐ 4.4", addr: "ул. Толе би 42", work: "Круглосуточно", phone: "+7 (7262) 45-67-89", car: "2 мин", bike: "5 мин", walk: "10 мин", lat: 42.9020, lng: 71.3790 }
           ],
-          shop: [
-            { name: "Минимаркет '24/7'", rating: "⭐ 4.5", addr: "ул. Бектурганова 12", work: "Круглосуточно", phone: "+7 (707) 999-88-11", car: "1 мин", bike: "2 мин", walk: "3 мин", lat: 42.9010, lng: 71.3810 }
+          park: [
+            { name: "Сквер Памяти", rating: "⭐ 4.7", addr: "Рядом с мавзолеем Даутбека", work: "Круглосуточно", phone: "Открытый доступ", car: "1 мин", bike: "1 мин", walk: "2 мин", lat: 42.9004, lng: 71.3815 }
+          ],
+          pharmacy: [
+            { name: "Аптека 'Биосфера'", rating: "⭐ 4.6", addr: "ул. Толе би 38", work: "08:00 - 23:00", phone: "+7 (707) 999-88-11", car: "1 мин", bike: "2 мин", walk: "5 мин", lat: 42.9012, lng: 71.3800 }
           ]
         }
       },
@@ -384,8 +398,11 @@
           hotel: [
             { name: "Хостел 'Silk Road'", rating: "⭐ 4.7", addr: "ул. Пушкина 3", work: "Круглосуточно", phone: "+7 (775) 666-55-44", car: "3 мин", bike: "7 мин", walk: "15 мин", lat: 42.8980, lng: 71.3890 }
           ],
-          shop: [
-            { name: "Сувениры Древнего Тараза", rating: "⭐ 4.9", addr: "Вход в археопарк", work: "09:00 - 18:00", phone: "+7 (700) 111-22-33", car: "1 мин", bike: "1 мин", walk: "2 мин", lat: 42.8965, lng: 71.3915 }
+          park: [
+            { name: "Археологический парк", rating: "⭐ 5.0", addr: "Территория городища", work: "09:00 - 19:00", phone: "+7 (7262) 50-10-20", car: "1 мин", bike: "1 мин", walk: "1 мин", lat: 42.8968, lng: 71.3915 }
+          ],
+          pharmacy: [
+            { name: "Центральная Аптека", rating: "⭐ 4.8", addr: "ул. Ташкентская 70", work: "08:00 - 22:00", phone: "+7 (7262) 34-12-00", car: "2 мин", bike: "4 мин", walk: "8 мин", lat: 42.8955, lng: 71.3900 }
           ]
         }
       }
@@ -394,11 +411,11 @@
     // Инициализация карты
     const map = L.map('map').setView(tarazCenter, 12);
 
-    // Красивые небесно-голубые тайлы карты (CartoDB Positron)
+    // Чистая карта OpenStreetMap France (БЕЗ ключей API и без водяных знаков)
     L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
-  maxZoom: 20,
-  attribution: '© OpenStreetMap France'
-}).addTo(map);
+      maxZoom: 20,
+      attribution: '© OpenStreetMap France'
+    }).addTo(map);
 
     // Добавляем центральный маркер «ТАРАЗ»
     const centerIcon = L.divIcon({
@@ -448,17 +465,19 @@
       document.getElementById('sidebar-desc').innerText = monument.desc;
       document.getElementById('sidebar-img').style.backgroundImage = `url('${monument.img}')`;
 
-      // Загружаем по умолчанию категории "Поесть"
+      // Загружаем по умолчанию категорию "Поесть"
       filterPoi('food');
     }
 
-    // Фильтрация и показ кафе/отелей
+    // Фильтрация и показ заведений (Кафе/Отели/Парки/Аптеки)
     function filterPoi(category) {
       if (!activeMonument) return;
 
       // Подсветка активной кнопки
       document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-      event.currentTarget.classList.add('active');
+      if (event && event.currentTarget) {
+        event.currentTarget.classList.add('active');
+      }
 
       // Очищаем старые метки заведений и линии к ним
       poiMarkers.forEach(m => map.removeLayer(m));
@@ -472,8 +491,9 @@
       const items = activeMonument.pois[category] || [];
 
       items.forEach(poi => {
-        // Добавляем маркер заведения на карту
-        const iconEmoji = category === 'food' ? '🍽️' : category === 'hotel' ? '🏨' : '🛒';
+        // Значки категорий
+        const iconEmoji = category === 'food' ? '🍽️' : category === 'hotel' ? '🏨' : category === 'park' ? '🌳' : '🏥';
+        
         const poiMarker = L.marker([poi.lat, poi.lng]).addTo(map);
         poiMarker.bindPopup(`<b>${iconEmoji} ${poi.name}</b><br>${poi.addr}`);
         poiMarkers.push(poiMarker);
@@ -482,7 +502,7 @@
         const line = L.polyline([[activeMonument.lat, activeMonument.lng], [poi.lat, poi.lng]], {
           color: '#38bdf8',
           weight: 3,
-          opacity: 0.8
+          opacity: 0.85
         }).addTo(map);
         poiLines.push(line);
 
