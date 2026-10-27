@@ -395,10 +395,10 @@
     const map = L.map('map').setView(tarazCenter, 12);
 
     // Красивые небесно-голубые тайлы карты (CartoDB Positron)
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-      maxZoom: 19,
-      attribution: '© OpenStreetMap & CartoDB'
-    }).addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+  maxZoom: 20,
+  attribution: '© OpenStreetMap France'
+}).addTo(map);
 
     // Добавляем центральный маркер «ТАРАЗ»
     const centerIcon = L.divIcon({
