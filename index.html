@@ -1,1 +1,526 @@
-nurboolat
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Тараз — Историческое Наследие</title>
+  
+  <!-- Подключаем Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background-color: #e0f2fe;
+      color: #0f172a;
+      overflow: hidden;
+    }
+
+    /* Небесная шапка */
+    header {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: #ffffff;
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(2, 132, 199, 0.25);
+      z-index: 1000;
+    }
+
+    header h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    header p {
+      font-size: 0.85rem;
+      opacity: 0.9;
+    }
+
+    #app-container {
+      display: flex;
+      flex: 1;
+      position: relative;
+    }
+
+    #map {
+      flex: 1;
+      height: 100%;
+      background: #bae6fd;
+    }
+
+    /* Боковая панель (Выезжает при клике) */
+    #sidebar {
+      width: 380px;
+      background: #ffffff;
+      box-shadow: -5px 0 25px rgba(3, 105, 161, 0.15);
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 999;
+      overflow-y: auto;
+      border-left: 3px solid #7dd3fc;
+    }
+
+    .sidebar-header {
+      position: relative;
+      height: 180px;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .sidebar-header-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(2, 132, 199, 0.85), transparent);
+      display: flex;
+      align-items: flex-end;
+      padding: 15px;
+    }
+
+    .sidebar-header h2 {
+      color: #ffffff;
+      font-size: 1.3rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255,255,255,0.8);
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #0369a1;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .sidebar-content {
+      padding: 18px;
+    }
+
+    .place-desc {
+      font-size: 0.9rem;
+      color: #334155;
+      line-height: 1.5;
+      margin-bottom: 20px;
+      background: #f0f9ff;
+      padding: 12px;
+      border-radius: 8px;
+      border-left: 4px solid #0284c7;
+    }
+
+    /* Кнопки категорий 2GIS style */
+    .categories-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #0284c7;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+
+    .category-buttons {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .cat-btn {
+      flex: 1;
+      padding: 10px 5px;
+      border: 1px solid #bae6fd;
+      background: #f0f9ff;
+      color: #0369a1;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .cat-btn:hover, .cat-btn.active {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+      box-shadow: 0 4px 10px rgba(2, 132, 199, 0.3);
+    }
+
+    /* Карточки заведений (Кафе/Отели) */
+    .poi-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .poi-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: all 0.2s ease;
+    }
+
+    .poi-card:hover {
+      border-color: #38bdf8;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.15);
+    }
+
+    .poi-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #0f172a;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .poi-rating {
+      background: #fef08a;
+      color: #854d0e;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .poi-info {
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .poi-routes {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed #e2e8f0;
+      font-size: 0.75rem;
+      color: #0284c7;
+      font-weight: 600;
+    }
+
+    /* Маркер Центра Тараза */
+    .center-label {
+      background: #0284c7;
+      color: white;
+      font-weight: bold;
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 2px solid white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      white-space: nowrap;
+    }
+
+    @media (max-width: 768px) {
+      #app-container {
+        flex-direction: column-reverse;
+      }
+      #sidebar {
+        width: 100%;
+        height: 50%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div>
+      <h1>☁️ Тараз — Туристическая Карта</h1>
+      <p>Исторические мавзолеи и городская инфраструктура</p>
+    </div>
+  </header>
+
+  <div id="app-container">
+    <div id="map"></div>
+
+    <div id="sidebar" style="display: none;">
+      <div class="sidebar-header" id="sidebar-img">
+        <button class="close-btn" onclick="closeSidebar()">✕</button>
+        <div class="sidebar-header-overlay">
+          <h2 id="sidebar-title">Название</h2>
+        </div>
+      </div>
+      <div class="sidebar-content">
+        <div class="place-desc" id="sidebar-desc">Описание...</div>
+
+        <div class="categories-title">Рядом с объектом (2GIS):</div>
+        <div class="category-buttons">
+          <button class="cat-btn active" onclick="filterPoi('food')"><span>🍽️</span> Поесть</button>
+          <button class="cat-btn" onclick="filterPoi('hotel')"><span>🏨</span> Отели</button>
+          <button class="cat-btn" onclick="filterPoi('shop')"><span>🛒</span> Магазины</button>
+        </div>
+
+        <div class="poi-list" id="poi-list">
+          <!-- Сюда подгружаются заведения -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
+  <script>
+    // Координаты центра Тараза
+    const tarazCenter = [42.9000, 71.3667];
+
+    // База данных мавзолеев и заведений рядом
+    const monuments = [
+      {
+        id: 1,
+        title: "Мавзолей Айша-Биби",
+        lat: 42.8335,
+        lng: 71.2052,
+        img: "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?auto=format&fit=crop&w=600&q=80",
+        desc: "Уникальный памятник архитектуры XII века, облицованный резными терракотовыми плитами. Символ любви и преданности.",
+        pois: {
+          food: [
+            { name: "Кафе 'Айша'", rating: "⭐ 4.8", addr: "с. Айша-Биби, ул. Жибек Жолы 12", work: "09:00 - 22:00", phone: "+7 (777) 111-22-33", car: "2 мин", bike: "5 мин", walk: "12 мин", lat: 42.8350, lng: 71.2070 },
+            { name: "Этно-аул 'Тараз'", rating: "⭐ 4.9", addr: "Трасса Тараз-Шымкент, 15 км", work: "10:00 - 00:00", phone: "+7 (701) 555-44-33", car: "4 мин", bike: "12 мин", walk: "25 мин", lat: 42.8310, lng: 71.2010 }
+          ],
+          hotel: [
+            { name: "Гостевой дом 'Биби'", rating: "⭐ 4.6", addr: "с. Айша-Биби, ул. Ауэзова 5", work: "Круглосуточно", phone: "+7 (705) 333-22-11", car: "3 мин", bike: "7 мин", walk: "15 мин", lat: 42.8360, lng: 71.2040 }
+          ],
+          shop: [
+            { name: "Сувениры Тараза", rating: "⭐ 4.7", addr: "Парк Айша-Биби", work: "09:00 - 19:00", phone: "+7 (778) 999-00-11", car: "1 мин", bike: "2 мин", walk: "4 мин", lat: 42.8330, lng: 71.2060 }
+          ]
+        }
+      },
+      {
+        id: 2,
+        title: "Мавзолей Бабаджи-Хатун",
+        lat: 42.8339,
+        lng: 71.2058,
+        img: "https://images.unsplash.com/photo-1548625149-fc4a29cf7092?auto=format&fit=crop&w=600&q=80",
+        desc: "Мавзолей XI-XII века с редким шатровым куполом. Хранительница верности Айша-Биби.",
+        pois: {
+          food: [
+            { name: "Чайхана 'Шелковый Путь'", rating: "⭐ 4.7", addr: "ул. Центральная 45", work: "08:00 - 23:00", phone: "+7 (702) 444-11-22", car: "2 мин", bike: "6 мин", walk: "14 мин", lat: 42.8345, lng: 71.2080 }
+          ],
+          hotel: [
+            { name: "Отель 'Оазис'", rating: "⭐ 4.5", addr: "ул. Мира 10", work: "Круглосуточно", phone: "+7 (707) 123-45-67", car: "5 мин", bike: "15 мин", walk: "30 мин", lat: 42.8370, lng: 71.2020 }
+          ],
+          shop: [
+            { name: "Продукты 'Асыл'", rating: "⭐ 4.4", addr: "ул. Центральная 50", work: "08:00 - 22:00", phone: "+7 (771) 000-11-22", car: "1 мин", bike: "3 мин", walk: "6 мин", lat: 42.8340, lng: 71.2070 }
+          ]
+        }
+      },
+      {
+        id: 3,
+        title: "Мавзолей Карахана",
+        lat: 42.9012,
+        lng: 71.3818,
+        img: "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=600&q=80",
+        desc: "Усыпальница правителя династии Караханидов (XI в.). Находится в самом центре Тараза.",
+        pois: {
+          food: [
+            { name: "Ресторан 'Карахан'", rating: "⭐ 4.9", addr: "ул. Толе би 34", work: "11:00 - 01:00", phone: "+7 (7262) 43-21-00", car: "1 мин", bike: "3 мин", walk: "5 мин", lat: 42.9020, lng: 71.3830 },
+            { name: "Кофейня 'Sky Coffee'", rating: "⭐ 4.8", addr: "пр. Абая 12", work: "08:00 - 23:00", phone: "+7 (708) 888-77-66", car: "2 мин", bike: "4 мин", walk: "8 мин", lat: 42.9000, lng: 71.3800 }
+          ],
+          hotel: [
+            { name: "Отель 'Тараз Плаза'", rating: "⭐ 4.8", addr: "ул. Сулейманова 15", work: "Круглосуточно", phone: "+7 (7262) 55-00-55", car: "3 мин", bike: "8 мин", walk: "16 мин", lat: 42.8990, lng: 71.3850 }
+          ],
+          shop: [
+            { name: "ТЦ 'Mart'", rating: "⭐ 4.9", addr: "ул. Толе би 27", work: "10:00 - 22:00", phone: "+7 (7262) 99-88-77", car: "2 мин", bike: "5 мин", walk: "10 мин", lat: 42.9030, lng: 71.3840 }
+          ]
+        }
+      },
+      {
+        id: 4,
+        title: "Мавзолей Даутбека",
+        lat: 42.9006,
+        lng: 71.3812,
+        img: "https://images.unsplash.com/photo-1590076175571-4b5459efb08c?auto=format&fit=crop&w=600&q=80",
+        desc: "Памятник XIII века, возведенный над захоронением великого военачальника Шамансура.",
+        pois: {
+          food: [
+            { name: "Столовая 'Вкусный Тараз'", rating: "⭐ 4.6", addr: "ул. Бектурганова 8", work: "08:00 - 20:00", phone: "+7 (705) 444-33-22", car: "1 мин", bike: "2 мин", walk: "4 мин", lat: 42.9000, lng: 71.3820 }
+          ],
+          hotel: [
+            { name: "Гостиница 'Жамбыл'", rating: "⭐ 4.4", addr: "ул. Толе би 42", work: "Круглосуточно", phone: "+7 (7262) 45-67-89", car: "2 мин", bike: "5 мин", walk: "10 мин", lat: 42.9020, lng: 71.3790 }
+          ],
+          shop: [
+            { name: "Минимаркет '24/7'", rating: "⭐ 4.5", addr: "ул. Бектурганова 12", work: "Круглосуточно", phone: "+7 (707) 999-88-11", car: "1 мин", bike: "2 мин", walk: "3 мин", lat: 42.9010, lng: 71.3810 }
+          ]
+        }
+      },
+      {
+        id: 5,
+        title: "Древнее городище Тараз",
+        lat: 42.8967,
+        lng: 71.3911,
+        img: "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=600&q=80",
+        desc: "Археологический парк и древний центр Великого Шёлкового пути с музеем под открытым небом.",
+        pois: {
+          food: [
+            { name: "Лагманная №1", rating: "⭐ 4.8", addr: "ул. Ташкентская 88", work: "09:00 - 22:00", phone: "+7 (701) 222-33-44", car: "2 мин", bike: "6 мин", walk: "12 мин", lat: 42.8950, lng: 71.3930 }
+          ],
+          hotel: [
+            { name: "Хостел 'Silk Road'", rating: "⭐ 4.7", addr: "ул. Пушкина 3", work: "Круглосуточно", phone: "+7 (775) 666-55-44", car: "3 мин", bike: "7 мин", walk: "15 мин", lat: 42.8980, lng: 71.3890 }
+          ],
+          shop: [
+            { name: "Сувениры Древнего Тараза", rating: "⭐ 4.9", addr: "Вход в археопарк", work: "09:00 - 18:00", phone: "+7 (700) 111-22-33", car: "1 мин", bike: "1 мин", walk: "2 мин", lat: 42.8965, lng: 71.3915 }
+          ]
+        }
+      }
+    ];
+
+    // Инициализация карты
+    const map = L.map('map').setView(tarazCenter, 12);
+
+    // Красивые небесно-голубые тайлы карты (CartoDB Positron)
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap & CartoDB'
+    }).addTo(map);
+
+    // Добавляем центральный маркер «ТАРАЗ»
+    const centerIcon = L.divIcon({
+      className: 'center-label',
+      html: '🏛️ ТАРАЗ',
+      iconSize: [90, 30],
+      iconAnchor: [45, 15]
+    });
+    L.marker(tarazCenter, { icon: centerIcon }).addTo(map);
+
+    let activeMonument = null;
+    let poiMarkers = [];
+    let poiLines = [];
+    let hubLines = [];
+
+    // Рисуем радиальные линии от центра ТАРАЗА ко всем 5 мавзолеям
+    monuments.forEach(m => {
+      const line = L.polyline([tarazCenter, [m.lat, m.lng]], {
+        color: '#0284c7',
+        weight: 2,
+        dashArray: '6, 8',
+        opacity: 0.6
+      }).addTo(map);
+      hubLines.push(line);
+
+      // Добавляем маркер мавзолея
+      const marker = L.marker([m.lat, m.lng]).addTo(map);
+      marker.bindTooltip(`<b>${m.title}</b>`, { permanent: false, direction: 'top' });
+
+      marker.on('click', () => {
+        openMonumentDetails(m);
+      });
+    });
+
+    // Функция открытия мавзолея в меню
+    function openMonumentDetails(monument) {
+      activeMonument = monument;
+
+      // Плавное приближение карты к мавзолею
+      map.flyTo([monument.lat, monument.lng], 15, { duration: 1.5 });
+
+      // Показываем Sidebar
+      const sidebar = document.getElementById('sidebar');
+      sidebar.style.display = 'flex';
+
+      document.getElementById('sidebar-title').innerText = monument.title;
+      document.getElementById('sidebar-desc').innerText = monument.desc;
+      document.getElementById('sidebar-img').style.backgroundImage = `url('${monument.img}')`;
+
+      // Загружаем по умолчанию категории "Поесть"
+      filterPoi('food');
+    }
+
+    // Фильтрация и показ кафе/отелей
+    function filterPoi(category) {
+      if (!activeMonument) return;
+
+      // Подсветка активной кнопки
+      document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+
+      // Очищаем старые метки заведений и линии к ним
+      poiMarkers.forEach(m => map.removeLayer(m));
+      poiLines.forEach(l => map.removeLayer(l));
+      poiMarkers = [];
+      poiLines = [];
+
+      const listContainer = document.getElementById('poi-list');
+      listContainer.innerHTML = '';
+
+      const items = activeMonument.pois[category] || [];
+
+      items.forEach(poi => {
+        // Добавляем маркер заведения на карту
+        const iconEmoji = category === 'food' ? '🍽️' : category === 'hotel' ? '🏨' : '🛒';
+        const poiMarker = L.marker([poi.lat, poi.lng]).addTo(map);
+        poiMarker.bindPopup(`<b>${iconEmoji} ${poi.name}</b><br>${poi.addr}`);
+        poiMarkers.push(poiMarker);
+
+        // Рисуем линию от мавзолея до заведения
+        const line = L.polyline([[activeMonument.lat, activeMonument.lng], [poi.lat, poi.lng]], {
+          color: '#38bdf8',
+          weight: 3,
+          opacity: 0.8
+        }).addTo(map);
+        poiLines.push(line);
+
+        // Создаем карточку в меню слева
+        const card = document.createElement('div');
+        card.className = 'poi-card';
+        card.innerHTML = `
+          <div class="poi-title">
+            <span>${iconEmoji} ${poi.name}</span>
+            <span class="poi-rating">${poi.rating}</span>
+          </div>
+          <div class="poi-info">
+            <span>📍 ${poi.addr}</span>
+            <span>🕒 ${poi.work}</span>
+            <span>📞 ${poi.phone}</span>
+          </div>
+          <div class="poi-routes">
+            <span>🚗 ${poi.car}</span>
+            <span>🚲 ${poi.bike}</span>
+            <span>🚶 ${poi.walk}</span>
+          </div>
+        `;
+
+        card.onclick = () => {
+          map.flyTo([poi.lat, poi.lng], 17, { duration: 1 });
+          poiMarker.openPopup();
+        };
+
+        listContainer.appendChild(card);
+      });
+    }
+
+    function closeSidebar() {
+      document.getElementById('sidebar').style.display = 'none';
+      map.flyTo(tarazCenter, 12, { duration: 1.5 });
+      poiMarkers.forEach(m => map.removeLayer(m));
+      poiLines.forEach(l => map.removeLayer(l));
+    }
+  </script>
+</body>
+</html>
