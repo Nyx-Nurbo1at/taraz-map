@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="kk">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Тараз — Туристический Путеводитель</title>
+  <title>Тараз — Тұғырлы тарих, интерактивті карта</title>
   
-  <!-- Подключаем Leaflet CSS -->
+  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   
   <style>
@@ -25,11 +25,11 @@
       overflow: hidden;
     }
 
-    /* Небесная шапка */
+    /* Аспан түстес тақырыпша */
     header {
       background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
       color: #ffffff;
-      padding: 14px 24px;
+      padding: 12px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -38,13 +38,13 @@
     }
 
     header h1 {
-      font-size: 1.35rem;
+      font-size: 1.25rem;
       font-weight: 700;
       letter-spacing: 0.5px;
     }
 
     header p {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       opacity: 0.9;
     }
 
@@ -60,7 +60,7 @@
       background: #e0f2fe;
     }
 
-    /* Боковая панель */
+    /* Мәзір панелі */
     #sidebar {
       width: 380px;
       background: #ffffff;
@@ -83,7 +83,7 @@
     .sidebar-header-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, rgba(2, 132, 199, 0.85), transparent);
+      background: linear-gradient(to top, rgba(2, 132, 199, 0.9), transparent);
       display: flex;
       align-items: flex-end;
       padding: 15px;
@@ -91,7 +91,7 @@
 
     .sidebar-header h2 {
       color: #ffffff;
-      font-size: 1.3rem;
+      font-size: 1.25rem;
       text-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
 
@@ -115,7 +115,7 @@
     }
 
     .place-desc {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: #334155;
       line-height: 1.5;
       margin-bottom: 20px;
@@ -125,9 +125,8 @@
       border-left: 4px solid #0284c7;
     }
 
-    /* Кнопки категорий */
     .categories-title {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 700;
       color: #0284c7;
       text-transform: uppercase;
@@ -150,7 +149,7 @@
       border-radius: 8px;
       cursor: pointer;
       font-weight: 600;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       transition: all 0.2s ease;
       display: flex;
       align-items: center;
@@ -165,7 +164,6 @@
       box-shadow: 0 4px 10px rgba(2, 132, 199, 0.3);
     }
 
-    /* Карточки заведений */
     .poi-list {
       display: flex;
       flex-direction: column;
@@ -190,7 +188,7 @@
 
     .poi-title {
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: #0f172a;
       display: flex;
       justify-content: space-between;
@@ -207,7 +205,7 @@
     }
 
     .poi-info {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: #64748b;
       margin-top: 6px;
       display: flex;
@@ -226,7 +224,6 @@
       font-weight: 600;
     }
 
-    /* Маркер Центра Тараза */
     .center-label {
       background: #0284c7;
       color: white;
@@ -253,8 +250,8 @@
 
   <header>
     <div>
-      <h1>☁️ Тараз — Туристическая Карта</h1>
-      <p>Исторические мавзолеи и городская инфраструктура</p>
+      <h1>☁️ Тараз — Көрікті жерлердің интерактивті картасы</h1>
+      <p>«Зерде» ғылыми жобасы аясында дайындалған интерактивті жүйе</p>
     </div>
   </header>
 
@@ -265,22 +262,22 @@
       <div class="sidebar-header" id="sidebar-img">
         <button class="close-btn" onclick="closeSidebar()">✕</button>
         <div class="sidebar-header-overlay">
-          <h2 id="sidebar-title">Название</h2>
+          <h2 id="sidebar-title">Атауы</h2>
         </div>
       </div>
       <div class="sidebar-content">
-        <div class="place-desc" id="sidebar-desc">Описание...</div>
+        <div class="place-desc" id="sidebar-desc">Сипаттамасы...</div>
 
-        <div class="categories-title">Рядом с объектом (2GIS):</div>
+        <div class="categories-title">Жақын маңдағы инфрақұрылым:</div>
         <div class="category-buttons">
-          <button class="cat-btn active" onclick="filterPoi('food')"><span>🍽️</span> Поесть</button>
-          <button class="cat-btn" onclick="filterPoi('hotel')"><span>🏨</span> Отели</button>
-          <button class="cat-btn" onclick="filterPoi('park')"><span>🌳</span> Парки</button>
-          <button class="cat-btn" onclick="filterPoi('pharmacy')"><span>🏥</span> Аптеки</button>
+          <button class="cat-btn active" onclick="filterPoi('food')"><span>🍽️</span> Тамақтану</button>
+          <button class="cat-btn" onclick="filterPoi('hotel')"><span>🏨</span> Қонақүйлер</button>
+          <button class="cat-btn" onclick="filterPoi('park')"><span>🌳</span> Саябақтар</button>
+          <button class="cat-btn" onclick="filterPoi('pharmacy')"><span>🏥</span> Дәріханалар</button>
         </div>
 
         <div class="poi-list" id="poi-list">
-          <!-- Сюда подгружаются заведения -->
+          <!-- Заведения подгружаются сюда -->
         </div>
       </div>
     </div>
@@ -289,159 +286,172 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   
   <script>
-    // Координаты центра Тараза
     const tarazCenter = [42.9000, 71.3667];
 
-    // База данных мавзолеев и заведений рядом
+    // Барлық 6 тарихи нысан (Ғылыми жоба бойынша)
     const monuments = [
       {
         id: 1,
-        title: "Мавзолей Айша-Биби",
-        lat: 42.8335,
-        lng: 71.2052,
-        img: "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?auto=format&fit=crop&w=600&q=80",
-        desc: "Уникальный памятник архитектуры XII века, облицованный резными терракотовыми плитами. Символ любви и преданности.",
+        title: "Қарахан кесенесі",
+        lat: 42.9012,
+        lng: 71.3818,
+        img: "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=600&q=80",
+        desc: "XI ғасырдағы ортағасырлық сәулет ескерткіші. Қарахан әулетінің билеушісі Ша-Махмұд Бұғра Қараханның құрметіне тұрғызылған.",
         pois: {
           food: [
-            { name: "Кафе 'Айша'", rating: "⭐ 4.8", addr: "с. Айша-Биби, ул. Жибек Жолы 12", work: "09:00 - 22:00", phone: "+7 (777) 111-22-33", car: "2 мин", bike: "5 мин", walk: "12 мин", lat: 42.8350, lng: 71.2070 },
-            { name: "Этно-аул 'Тараз'", rating: "⭐ 4.9", addr: "Трасса Тараз-Шымкент, 15 км", work: "10:00 - 00:00", phone: "+7 (701) 555-44-33", car: "4 мин", bike: "12 мин", walk: "25 мин", lat: 42.8310, lng: 71.2010 }
+            { name: "Ресторан 'Карахан'", rating: "⭐ 4.9", addr: "Төле би к-сі 34", work: "11:00 - 01:00", phone: "+7 (7262) 43-21-00", car: "1 мин", bike: "3 мин", walk: "5 мин", lat: 42.9020, lng: 71.3830 },
+            { name: "Кофейня 'Sky Coffee'", rating: "⭐ 4.8", addr: "Абай даңғылы 12", work: "08:00 - 23:00", phone: "+7 (708) 888-77-66", car: "2 мин", bike: "4 мин", walk: "8 мин", lat: 42.9000, lng: 71.3800 }
           ],
           hotel: [
-            { name: "Гостевой дом 'Биби-Ана'", rating: "⭐ 4.7", addr: "с. Айша-Биби, ул. Ауэзова 5", work: "Круглосуточно", phone: "+7 (705) 333-22-11", car: "3 мин", bike: "7 мин", walk: "15 мин", lat: 42.8360, lng: 71.2040 }
+            { name: "Отель 'Тараз Плаза'", rating: "⭐ 4.8", addr: "Сүлейманов к-сі 15", work: "24/7", phone: "+7 (7262) 55-00-55", car: "3 мин", bike: "8 мин", walk: "16 мин", lat: 42.8990, lng: 71.3850 }
           ],
           park: [
-            { name: "Сквер Айша-Биби", rating: "⭐ 4.9", addr: "Территория комплекса", work: "08:00 - 22:00", phone: "Открытый доступ", car: "1 мин", bike: "1 мин", walk: "2 мин", lat: 42.8330, lng: 71.2055 }
+            { name: "Б. Момышұлы саябағы", rating: "⭐ 4.9", addr: "Орталық саябақ", work: "Ашық", phone: "Тегін", car: "1 мин", bike: "2 мин", walk: "3 мин", lat: 42.9015, lng: 71.3825 }
           ],
           pharmacy: [
-            { name: "Аптека 'Europharma'", rating: "⭐ 4.6", addr: "с. Айша-Биби, ул. Центральная 18", work: "08:00 - 21:00", phone: "+7 (7262) 99-11-22", car: "2 мин", bike: "4 мин", walk: "8 мин", lat: 42.8345, lng: 71.2065 }
+            { name: "Дәріхана 'Зере'", rating: "⭐ 4.7", addr: "Төле би к-сі 20", work: "24/7", phone: "+7 (7262) 44-55-66", car: "1 мин", bike: "2 мин", walk: "4 мин", lat: 42.9008, lng: 71.3810 }
           ]
         }
       },
       {
         id: 2,
-        title: "Мавзолей Бабаджи-Хатун",
-        lat: 42.8339,
-        lng: 71.2058,
-        img: "https://images.unsplash.com/photo-1548625149-fc4a29cf7092?auto=format&fit=crop&w=600&q=80",
-        desc: "Мавзолей XI-XII века с редким шатровым куполом. Хранительница верности Айша-Биби.",
+        title: "Тектұрмас тарихи-туристік кешені",
+        lat: 42.8710,
+        lng: 71.4150,
+        img: "https://images.unsplash.com/photo-1590076175571-4b5459efb08c?auto=format&fit=crop&w=600&q=80",
+        desc: "Талас өзенінің жағасындағы биік төбеде орналасқан тарихи кешен. Қаланың әсем көрінісі ашылатын киелі орын.",
         pois: {
           food: [
-            { name: "Чайхана 'Шелковый Путь'", rating: "⭐ 4.7", addr: "ул. Центральная 45", work: "08:00 - 23:00", phone: "+7 (702) 444-11-22", car: "2 мин", bike: "6 мин", walk: "14 мин", lat: 42.8345, lng: 71.2080 }
+            { name: "Чайхана 'Тектұрмас'", rating: "⭐ 4.7", addr: "Талас жағалауы", work: "10:00 - 23:00", phone: "+7 (702) 555-11-22", car: "2 мин", bike: "5 мин", walk: "12 мин", lat: 42.8720, lng: 71.4160 }
           ],
           hotel: [
-            { name: "Отель 'Оазис'", rating: "⭐ 4.5", addr: "ул. Мира 10", work: "Круглосуточно", phone: "+7 (707) 123-45-67", car: "5 мин", bike: "15 мин", walk: "30 мин", lat: 42.8370, lng: 71.2020 }
+            { name: "Деми-отель 'Талас'", rating: "⭐ 4.6", addr: "Жағалау к-сі 4", work: "24/7", phone: "+7 (707) 888-99-00", car: "4 мин", bike: "10 мин", walk: "20 мин", lat: 42.8730, lng: 71.4120 }
           ],
           park: [
-            { name: "Историческая аллея", rating: "⭐ 4.8", addr: "Окрестности мавзолея", work: "Круглосуточно", phone: "Открытый доступ", car: "1 мин", bike: "2 мин", walk: "3 мин", lat: 42.8342, lng: 71.2062 }
+            { name: "Тектұрмас қарау алаңы", rating: "⭐ 5.0", addr: "Кешен аумағы", work: "24/7", phone: "Тегін", car: "1 мин", bike: "1 мин", walk: "2 мин", lat: 42.8712, lng: 71.4152 }
           ],
           pharmacy: [
-            { name: "Аптека 'Садыхан'", rating: "⭐ 4.5", addr: "ул. Центральная 30", work: "08:00 - 22:00", phone: "+7 (771) 000-11-22", car: "2 мин", bike: "5 мин", walk: "10 мин", lat: 42.8350, lng: 71.2075 }
+            { name: "Дәріхана №5", rating: "⭐ 4.5", addr: "Төменгі төбе к-сі 12", work: "08:00 - 21:00", phone: "+7 (7262) 33-22-11", car: "3 мин", bike: "7 мин", walk: "15 мин", lat: 42.8740, lng: 71.4130 }
           ]
         }
       },
       {
         id: 3,
-        title: "Мавзолей Карахана",
-        lat: 42.9012,
-        lng: 71.3818,
-        img: "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=600&q=80",
-        desc: "Усыпальница правителя династии Караханидов (XI в.). Находится в самом центре Тараза.",
+        title: "«Көне Тараз» кешені",
+        lat: 42.8967,
+        lng: 71.3911,
+        img: "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=600&q=80",
+        desc: "Тараздың ежелгі тарихын, археологиялық қазбаларын, музейлерін және қолөнершілер орталығын біріктіретін кешен.",
         pois: {
           food: [
-            { name: "Ресторан 'Карахан'", rating: "⭐ 4.9", addr: "ул. Толе би 34", work: "11:00 - 01:00", phone: "+7 (7262) 43-21-00", car: "1 мин", bike: "3 мин", walk: "5 мин", lat: 42.9020, lng: 71.3830 },
-            { name: "Кофейня 'Sky Coffee'", rating: "⭐ 4.8", addr: "пр. Абая 12", work: "08:00 - 23:00", phone: "+7 (708) 888-77-66", car: "2 мин", bike: "4 мин", walk: "8 мин", lat: 42.9000, lng: 71.3800 }
+            { name: "Лағманхана №1", rating: "⭐ 4.8", addr: "Ташкент к-сі 88", work: "09:00 - 22:00", phone: "+7 (701) 222-33-44", car: "2 мин", bike: "6 мин", walk: "12 мин", lat: 42.8950, lng: 71.3930 }
           ],
           hotel: [
-            { name: "Отель 'Тараз Плаза'", rating: "⭐ 4.8", addr: "ул. Сулейманова 15", work: "Круглосуточно", phone: "+7 (7262) 55-00-55", car: "3 мин", bike: "8 мин", walk: "16 мин", lat: 42.8990, lng: 71.3850 }
+            { name: "Хостел 'Silk Road'", rating: "⭐ 4.7", addr: "Пушкин к-сі 3", work: "24/7", phone: "+7 (775) 666-55-44", car: "3 мин", bike: "7 мин", walk: "15 мин", lat: 42.8980, lng: 71.3890 }
           ],
           park: [
-            { name: "Парк им. Б. Момышулы", rating: "⭐ 4.9", addr: "Центральный парк", work: "Круглосуточно", phone: "Открытый доступ", car: "1 мин", bike: "2 мин", walk: "3 мин", lat: 42.9015, lng: 71.3825 }
+            { name: "Археологиялық саябақ", rating: "⭐ 5.0", addr: "Көне Тараз аумағы", work: "09:00 - 19:00", phone: "+7 (7262) 50-10-20", car: "1 мин", bike: "1 мин", walk: "1 мин", lat: 42.8968, lng: 71.3915 }
           ],
           pharmacy: [
-            { name: "Аптека 24/7 'Зере'", rating: "⭐ 4.7", addr: "ул. Толе би 20", work: "Круглосуточно", phone: "+7 (7262) 44-55-66", car: "1 мин", bike: "2 мин", walk: "4 мин", lat: 42.9008, lng: 71.3810 }
+            { name: "Орталық Дәріхана", rating: "⭐ 4.8", addr: "Ташкент к-сі 70", work: "08:00 - 22:00", phone: "+7 (7262) 34-12-00", car: "2 мин", bike: "4 мин", walk: "8 мин", lat: 42.8955, lng: 71.3900 }
           ]
         }
       },
       {
         id: 4,
-        title: "Мавзолей Даутбека",
-        lat: 42.9006,
-        lng: 71.3812,
-        img: "https://images.unsplash.com/photo-1590076175571-4b5459efb08c?auto=format&fit=crop&w=600&q=80",
-        desc: "Памятник XIII века, возведенный над захоронением великого военачальника Шамансура.",
+        title: "Айша бибі кесенесі",
+        lat: 42.8335,
+        lng: 71.2052,
+        img: "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?auto=format&fit=crop&w=600&q=80",
+        desc: "XI-XII ғасырлардағы оймыш терракоталық плиталармен қапталған сәулет өнерінің озық үлгісі. Мәңгілік махаббат символы.",
         pois: {
           food: [
-            { name: "Столовая 'Вкусный Тараз'", rating: "⭐ 4.6", addr: "ул. Бектурганова 8", work: "08:00 - 20:00", phone: "+7 (705) 444-33-22", car: "1 мин", bike: "2 мин", walk: "4 мин", lat: 42.9000, lng: 71.3820 }
+            { name: "Кафе 'Айша'", rating: "⭐ 4.8", addr: "Айша-Биби ауылы, Жібек Жолы 12", work: "09:00 - 22:00", phone: "+7 (777) 111-22-33", car: "2 мин", bike: "5 мин", walk: "12 мин", lat: 42.8350, lng: 71.2070 }
           ],
           hotel: [
-            { name: "Гостиница 'Жамбыл'", rating: "⭐ 4.4", addr: "ул. Толе би 42", work: "Круглосуточно", phone: "+7 (7262) 45-67-89", car: "2 мин", bike: "5 мин", walk: "10 мин", lat: 42.9020, lng: 71.3790 }
+            { name: "Қонақ үй 'Биби-Ана'", rating: "⭐ 4.7", addr: "Әуезов к-сі 5", work: "24/7", phone: "+7 (705) 333-22-11", car: "3 мин", bike: "7 мин", walk: "15 мин", lat: 42.8360, lng: 71.2040 }
           ],
           park: [
-            { name: "Сквер Памяти", rating: "⭐ 4.7", addr: "Рядом с мавзолеем Даутбека", work: "Круглосуточно", phone: "Открытый доступ", car: "1 мин", bike: "1 мин", walk: "2 мин", lat: 42.9004, lng: 71.3815 }
+            { name: "Айша бибі гүлзары", rating: "⭐ 4.9", addr: "Кешен аумағы", work: "08:00 - 22:00", phone: "Тегін", car: "1 мин", bike: "1 мин", walk: "2 мин", lat: 42.8330, lng: 71.2055 }
           ],
           pharmacy: [
-            { name: "Аптека 'Биосфера'", rating: "⭐ 4.6", addr: "ул. Толе би 38", work: "08:00 - 23:00", phone: "+7 (707) 999-88-11", car: "1 мин", bike: "2 мин", walk: "5 мин", lat: 42.9012, lng: 71.3800 }
+            { name: "Дәріхана 'Europharma'", rating: "⭐ 4.6", addr: "Орталық к-сі 18", work: "08:00 - 21:00", phone: "+7 (7262) 99-11-22", car: "2 мин", bike: "4 мин", walk: "8 мин", lat: 42.8345, lng: 71.2065 }
           ]
         }
       },
       {
         id: 5,
-        title: "Древнее городище Тараз",
-        lat: 42.8967,
-        lng: 71.3911,
-        img: "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=600&q=80",
-        desc: "Археологический парк и древний центр Великого Шёлкового пути с музеем под открытым небом.",
+        title: "Бабажа қатын кесенесі",
+        lat: 42.8339,
+        lng: 71.2058,
+        img: "https://images.unsplash.com/photo-1548625149-fc4a29cf7092?auto=format&fit=crop&w=600&q=80",
+        desc: "Айша бибі кесенесінің жанында орналасқан XI-XII ғ. ескерткіші. Он алты қырлы сирек кездесетін шатырлы күмбезі бар.",
         pois: {
           food: [
-            { name: "Лагманная №1", rating: "⭐ 4.8", addr: "ул. Ташкентская 88", work: "09:00 - 22:00", phone: "+7 (701) 222-33-44", car: "2 мин", bike: "6 мин", walk: "12 мин", lat: 42.8950, lng: 71.3930 }
+            { name: "Шәйхана 'Жібек Жолы'", rating: "⭐ 4.7", addr: "Орталық к-сі 45", work: "08:00 - 23:00", phone: "+7 (702) 444-11-22", car: "2 мин", bike: "6 мин", walk: "14 мин", lat: 42.8345, lng: 71.2080 }
           ],
           hotel: [
-            { name: "Хостел 'Silk Road'", rating: "⭐ 4.7", addr: "ул. Пушкина 3", work: "Круглосуточно", phone: "+7 (775) 666-55-44", car: "3 мин", bike: "7 мин", walk: "15 мин", lat: 42.8980, lng: 71.3890 }
+            { name: "Отель 'Оазис'", rating: "⭐ 4.5", addr: "Бейбітшілік к-сі 10", work: "24/7", phone: "+7 (707) 123-45-67", car: "5 мин", bike: "15 мин", walk: "30 мин", lat: 42.8370, lng: 71.2020 }
           ],
           park: [
-            { name: "Археологический парк", rating: "⭐ 5.0", addr: "Территория городища", work: "09:00 - 19:00", phone: "+7 (7262) 50-10-20", car: "1 мин", bike: "1 мин", walk: "1 мин", lat: 42.8968, lng: 71.3915 }
+            { name: "Тарихи аллея", rating: "⭐ 4.8", addr: "Кешен маңы", work: "24/7", phone: "Тегін", car: "1 мин", bike: "2 мин", walk: "3 мин", lat: 42.8342, lng: 71.2062 }
           ],
           pharmacy: [
-            { name: "Центральная Аптека", rating: "⭐ 4.8", addr: "ул. Ташкентская 70", work: "08:00 - 22:00", phone: "+7 (7262) 34-12-00", car: "2 мин", bike: "4 мин", walk: "8 мин", lat: 42.8955, lng: 71.3900 }
+            { name: "Дәріхана 'Садыхан'", rating: "⭐ 4.5", addr: "Орталық к-сі 30", work: "08:00 - 22:00", phone: "+7 (771) 000-11-22", car: "2 мин", bike: "5 мин", walk: "10 мин", lat: 42.8350, lng: 71.2075 }
+          ]
+        }
+      },
+      {
+        id: 6,
+        title: "Ақыртас археологиялық кешені",
+        lat: 42.9560,
+        lng: 71.8010,
+        img: "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?auto=format&fit=crop&w=600&q=80",
+        desc: "VIII-IX ғасырларға жататын ірі қызыл тас блоктардан тұрғызылған жұмбақ археологиялық кешен. ЮНЕСКО мұрасы.",
+        pois: {
+          food: [
+            { name: "Этно-кафе 'Ақыртас'", rating: "⭐ 4.8", addr: "Кешен кіреберісі", work: "09:00 - 20:00", phone: "+7 (701) 888-33-22", car: "1 мин", bike: "3 мин", walk: "5 мин", lat: 42.9570, lng: 71.8020 }
+          ],
+          hotel: [
+            { name: "Визит-орталық қонақ бөлмесі", rating: "⭐ 4.9", addr: "Ақыртас кешені", work: "24/7", phone: "+7 (7262) 50-50-50", car: "1 мин", bike: "2 мин", walk: "4 мин", lat: 42.9565, lng: 71.8015 }
+          ],
+          park: [
+            { name: "Ақыртас қорық зонсы", rating: "⭐ 5.0", addr: "Ақыртас аумағы", work: "09:00 - 19:00", phone: "Билетпен", car: "1 мин", bike: "1 мин", walk: "1 мин", lat: 42.9562, lng: 71.8011 }
+          ],
+          pharmacy: [
+            { name: "Алғашқы көмек пункті", rating: "⭐ 4.7", addr: "Визит-орталық", work: "09:00 - 18:00", phone: "+7 (702) 000-11-22", car: "1 мин", bike: "1 мин", walk: "2 мин", lat: 42.9561, lng: 71.8012 }
           ]
         }
       }
     ];
 
-    // Инициализация карты
-    const map = L.map('map').setView(tarazCenter, 12);
+    const map = L.map('map').setView(tarazCenter, 11);
 
-    // Чистая карта OpenStreetMap France (БЕЗ ключей API и без водяных знаков)
     L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
       maxZoom: 20,
       attribution: '© OpenStreetMap France'
     }).addTo(map);
 
-    // Добавляем центральный маркер «ТАРАЗ»
     const centerIcon = L.divIcon({
       className: 'center-label',
-      html: '🏛️ ТАРАЗ',
-      iconSize: [90, 30],
-      iconAnchor: [45, 15]
+      html: '🏛️ ТАРАЗ ҚАЛАСЫ',
+      iconSize: [120, 30],
+      iconAnchor: [60, 15]
     });
     L.marker(tarazCenter, { icon: centerIcon }).addTo(map);
 
     let activeMonument = null;
     let poiMarkers = [];
     let poiLines = [];
-    let hubLines = [];
 
-    // Рисуем радиальные линии от центра ТАРАЗА ко всем 5 мавзолеям
     monuments.forEach(m => {
-      const line = L.polyline([tarazCenter, [m.lat, m.lng]], {
+      L.polyline([tarazCenter, [m.lat, m.lng]], {
         color: '#0284c7',
         weight: 2,
         dashArray: '6, 8',
         opacity: 0.6
       }).addTo(map);
-      hubLines.push(line);
 
-      // Добавляем маркер мавзолея
       const marker = L.marker([m.lat, m.lng]).addTo(map);
       marker.bindTooltip(`<b>${m.title}</b>`, { permanent: false, direction: 'top' });
 
@@ -450,14 +460,10 @@
       });
     });
 
-    // Функция открытия мавзолея в меню
     function openMonumentDetails(monument) {
       activeMonument = monument;
+      map.flyTo([monument.lat, monument.lng], 14, { duration: 1.5 });
 
-      // Плавное приближение карты к мавзолею
-      map.flyTo([monument.lat, monument.lng], 15, { duration: 1.5 });
-
-      // Показываем Sidebar
       const sidebar = document.getElementById('sidebar');
       sidebar.style.display = 'flex';
 
@@ -465,21 +471,17 @@
       document.getElementById('sidebar-desc').innerText = monument.desc;
       document.getElementById('sidebar-img').style.backgroundImage = `url('${monument.img}')`;
 
-      // Загружаем по умолчанию категорию "Поесть"
       filterPoi('food');
     }
 
-    // Фильтрация и показ заведений (Кафе/Отели/Парки/Аптеки)
     function filterPoi(category) {
       if (!activeMonument) return;
 
-      // Подсветка активной кнопки
       document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
       if (event && event.currentTarget) {
         event.currentTarget.classList.add('active');
       }
 
-      // Очищаем старые метки заведений и линии к ним
       poiMarkers.forEach(m => map.removeLayer(m));
       poiLines.forEach(l => map.removeLayer(l));
       poiMarkers = [];
@@ -491,14 +493,12 @@
       const items = activeMonument.pois[category] || [];
 
       items.forEach(poi => {
-        // Значки категорий
         const iconEmoji = category === 'food' ? '🍽️' : category === 'hotel' ? '🏨' : category === 'park' ? '🌳' : '🏥';
         
         const poiMarker = L.marker([poi.lat, poi.lng]).addTo(map);
         poiMarker.bindPopup(`<b>${iconEmoji} ${poi.name}</b><br>${poi.addr}`);
         poiMarkers.push(poiMarker);
 
-        // Рисуем линию от мавзолея до заведения
         const line = L.polyline([[activeMonument.lat, activeMonument.lng], [poi.lat, poi.lng]], {
           color: '#38bdf8',
           weight: 3,
@@ -506,7 +506,6 @@
         }).addTo(map);
         poiLines.push(line);
 
-        // Создаем карточку в меню слева
         const card = document.createElement('div');
         card.className = 'poi-card';
         card.innerHTML = `
@@ -527,7 +526,7 @@
         `;
 
         card.onclick = () => {
-          map.flyTo([poi.lat, poi.lng], 17, { duration: 1 });
+          map.flyTo([poi.lat, poi.lng], 16, { duration: 1 });
           poiMarker.openPopup();
         };
 
@@ -537,7 +536,7 @@
 
     function closeSidebar() {
       document.getElementById('sidebar').style.display = 'none';
-      map.flyTo(tarazCenter, 12, { duration: 1.5 });
+      map.flyTo(tarazCenter, 11, { duration: 1.5 });
       poiMarkers.forEach(m => map.removeLayer(m));
       poiLines.forEach(l => map.removeLayer(l));
     }
